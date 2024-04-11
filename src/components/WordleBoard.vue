@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { VICTORY_MESSAGE, DEFEAT_MESSAGE } from '@/settings'
+import { VICTORY_MESSAGE, DEFEAT_MESSAGE, WORD_SIZE } from '@/settings'
 import englishWords from '@/englishWordsWith5Letters.json'
 
 defineProps({
@@ -18,7 +18,7 @@ const formattedGuessInProgress = computed({
   },
 
   set(rawValue: string) {
-    guessInProgess.value = rawValue.slice(0, 5)
+    guessInProgess.value = rawValue.slice(0, WORD_SIZE)
   }
 })
 
@@ -27,7 +27,7 @@ const formattedGuessInProgress = computed({
 <template>
   <input
     type="text"
-    maxlength="5"
+    :maxlength="WORD_SIZE"
     v-model="formattedGuessInProgress"
     @keydown.enter="guessSubmitted = guessInProgess"
   >

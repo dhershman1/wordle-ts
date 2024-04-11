@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, test, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import WordleBoard from '../WordleBoard.vue'
 
-import { VICTORY_MESSAGE, DEFEAT_MESSAGE } from '@/settings'
+import { VICTORY_MESSAGE, DEFEAT_MESSAGE, WORD_SIZE } from '@/settings'
 
 describe('WordleBoard', () => {
   const wordOfTheDay = 'TESTS'
@@ -62,7 +62,7 @@ describe('WordleBoard', () => {
   })
 
   describe('Player Input', () => {
-    test('Player guesses are limited to 5 characters', async () => {
+    test(`Player guesses are limited to ${WORD_SIZE} characters`, async () => {
       await playerSubmitsGuess(wordOfTheDay + 'EXTRA')
 
       expect(wrapper.text()).toContain(VICTORY_MESSAGE)
