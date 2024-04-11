@@ -1,6 +1,6 @@
-# wordle-vite
+# wordle-ts
 
-This template should help get you started developing with Vue 3 in Vite.
+A world clone for TDD and TS practice
 
 ## Recommended IDE Setup
 
