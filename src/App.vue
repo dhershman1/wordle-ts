@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import WorldBoard from './components/WordleBoard.vue'
+import WordleBoard from '@/components/WordleBoard.vue'
 </script>
 
 <template>
