@@ -5,10 +5,7 @@ import WordleBoard from '../WordleBoard.vue'
 
 describe('WordleBoard', () => {
   test('A Victory message appears when the user makes a guess that matches the word of the day', async () => {
-    //Arrange
     const wrapper = mount(WordleBoard, { props: { wordOfTheDay: "TESTS" } })
-
-    // Act
     const guessInput = wrapper.find('input[type=text]')
 
     await guessInput.setValue('TESTS')
