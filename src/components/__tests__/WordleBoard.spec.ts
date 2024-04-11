@@ -87,11 +87,19 @@ describe('WordleBoard', () => {
       expect(wrapper.find<HTMLInputElement>('input[type=text]').element.value).toEqual('HRT')
     })
 
-    test('Non-letter character do not render on the screen while being typed', async () => {
-      await playerSubmitsGuess('12')
-      await playerSubmitsGuess('123')
+    test("remains in focus the entire time", async () => {
+      document.body.innerHTML = `<div id="app"></div>`
+      wrapper = mount(WordleBoard, {
+        props: { wordOfTheDay },
+        attachTo: "#app"
+      })
 
-      expect(wrapper.find<HTMLInputElement>('input[type=text]').element.value).toEqual('')
+      expect(wrapper.find("input[type=text]").attributes("autofocus")).not.toBeUndefined()
+
+      await wrapper.find("input[type=text]").trigger("blur")
+      setTimeout(() => {
+        expect(document.activeElement).toBe(wrapper.find("input[type=text]").element)
+      }, 55)
     })
   })
 })
