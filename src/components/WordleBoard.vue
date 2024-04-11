@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { VICTORY_MESSAGE, DEFEAT_MESSAGE } from '@/settings'
 import englishWords from '@/englishWordsWith5Letters.json'
 
@@ -12,13 +12,23 @@ defineProps({
 
 const guessInProgess = ref('')
 const guessSubmitted = ref('')
+const formattedGuessInProgress = computed({
+  get () {
+    return guessInProgess.value
+  },
+
+  set(rawValue: string) {
+    guessInProgess.value = rawValue.slice(0, 5)
+  }
+})
 
 </script>
 
 <template>
   <input
     type="text"
-    v-model="guessInProgess"
+    maxlength="5"
+    v-model="formattedGuessInProgress"
     @keydown.enter="guessSubmitted = guessInProgess"
   >
   <p
