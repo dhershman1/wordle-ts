@@ -67,21 +67,30 @@ describe('WordleBoard', () => {
 
       expect(wrapper.text()).toContain(VICTORY_MESSAGE)
     })
+
     test('Player Guesses can only be submitted if they are real words', async () => {
       await playerSubmitsGuess('QWERT')
 
       expect(wrapper.text()).not.toContain(VICTORY_MESSAGE)
       expect(wrapper.text()).not.toContain(DEFEAT_MESSAGE)
     })
+
     test('Player guesses are not case sensitive', async () => {
       await playerSubmitsGuess(wordOfTheDay.toLowerCase())
 
       expect(wrapper.text()).toContain(VICTORY_MESSAGE)
     })
+
     test('Player guesses can only contain letters', async () => {
       await playerSubmitsGuess('H3!RT')
 
       expect(wrapper.find<HTMLInputElement>('input[type=text]').element.value).toEqual('HRT')
+    })
+
+    test('Non-letter character do not render on the screen while being typed', async () => {
+      await playerSubmitsGuess('333')
+
+      expect(wrapper.find<HTMLInputElement>('input[type=text]').element.value).toEqual('')
     })
   })
 })

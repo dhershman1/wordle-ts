@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import { VICTORY_MESSAGE, DEFEAT_MESSAGE, WORD_SIZE } from '@/settings'
 import englishWords from '@/englishWordsWith5Letters.json'
 
@@ -10,27 +10,26 @@ defineProps({
   }
 })
 
-const guessInProgess = ref('')
+const guessInProgress = ref('')
 const guessSubmitted = ref('')
-const formattedGuessInProgress = computed({
-  get () {
-    return guessInProgess.value
-  },
-
-  set(rawValue: string) {
-    guessInProgess.value = rawValue
-      .slice(0, WORD_SIZE)
-      .toUpperCase()
-      .replace(/[^A-Z]+/gi, '')
-  }
-})
 
 function onSubmit () {
-  if (!englishWords.includes(guessInProgess.value)) {
+  if (!englishWords.includes(guessInProgress.value)) {
     return
   }
 
-  guessSubmitted.value = guessInProgess.value
+  guessSubmitted.value = guessInProgress.value
+}
+
+function handleInput (e: Event) {
+  const target = e.target as HTMLInputElement
+
+  guessInProgress.value = target.value
+    .slice(0, WORD_SIZE)
+    .toUpperCase()
+    .replace(/[^A-Z]+/gi, '')
+
+  target.value = guessInProgress.value
 }
 
 </script>
@@ -39,7 +38,8 @@ function onSubmit () {
   <input
     type="text"
     :maxlength="WORD_SIZE"
-    v-model="formattedGuessInProgress"
+    :value="guessInProgress"
+    @input="handleInput"
     @keydown.enter="onSubmit"
   >
   <p
