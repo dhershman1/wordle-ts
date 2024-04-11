@@ -1,6 +1,6 @@
 # wordle-ts
 
-A world clone for TDD and TS practice
+A wordle clone for TDD and TS practice
 
 ## Recommended IDE Setup
 
