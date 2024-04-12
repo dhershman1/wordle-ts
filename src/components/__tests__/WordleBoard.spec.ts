@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, test, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import WordleBoard from '../WordleBoard.vue'
 
-import { VICTORY_MESSAGE, DEFEAT_MESSAGE, WORD_SIZE } from '@/settings'
+import { MAX_GUESSES, VICTORY_MESSAGE, DEFEAT_MESSAGE, WORD_SIZE } from '@/settings'
 
 describe('WordleBoard', () => {
   const wordOfTheDay = 'TESTS'
@@ -35,7 +35,7 @@ describe('WordleBoard', () => {
       { numberOfGuesses: 3, shouldSeeDefeatMessage: false },
       { numberOfGuesses: 4, shouldSeeDefeatMessage: false },
       { numberOfGuesses: 5, shouldSeeDefeatMessage: false },
-      { numberOfGuesses: 6, shouldSeeDefeatMessage: true },
+      { numberOfGuesses: MAX_GUESSES, shouldSeeDefeatMessage: true },
     ])('A defeat message should appear if the player makes 6 incorrect guesses', ({
       numberOfGuesses,
       shouldSeeDefeatMessage
