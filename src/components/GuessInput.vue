@@ -39,7 +39,7 @@ function focusInput (e: Event) {
 
   setTimeout(() => {
     target.focus()
-  }, 50)
+  }, 100)
 }
 </script>
 
