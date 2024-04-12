@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import { MAX_GUESSES, VICTORY_MESSAGE, DEFEAT_MESSAGE } from '@/settings'
 import englishWords from '@/englishWordsWith5Letters.json'
 import GuessInput from './GuessInput.vue'
+import GuessView from './GuessView.vue'
 
 const props = defineProps({
   wordOfTheDay: {
@@ -16,6 +17,11 @@ const guessesSubmitted = ref<string[]>([])
 const isGameOver = computed(() =>
     guessesSubmitted.value.length === MAX_GUESSES
     || guessesSubmitted.value.includes(props.wordOfTheDay))
+const countOfEmptyGuesses = computed(() => {
+  const guessesRemaining = MAX_GUESSES - guessesSubmitted.value.length
+
+  return isGameOver.value ? guessesRemaining : guessesRemaining - 1
+})
 </script>
 
 <template>
@@ -24,10 +30,15 @@ const isGameOver = computed(() =>
       <li
       v-for="(guess, index) in guessesSubmitted"
       :key="`${index}-${guess}`">
-        {{ guess }}
+        <guess-view :guess="guess" />
+      </li>
+      <li>
+        <guess-input :disabled="isGameOver" @guess-submitted="guess => guessesSubmitted.push(guess)" />
+      </li>
+      <li v-for="i in countOfEmptyGuesses" :key="i">
+        <guess-view guess="" />
       </li>
     </ul>
-    <guess-input @guess-submitted="guess => guessesSubmitted.push(guess)" />
     <p
       v-if="isGameOver"
       class="end-of-game-message"
@@ -49,6 +60,17 @@ main {
   white-space: nowrap;
   text-align: center;
 }
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 0.25rem;
+}
+
 @keyframes end-of-game-message-animation {
   0% {
     opacity: 0;

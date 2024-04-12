@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, test, vi } from 'vitest'
 
 import { mount } from '@vue/test-utils'
 import WordleBoard from '../WordleBoard.vue'
+import GuessView from "../GuessView.vue"
 
 import { MAX_GUESSES, VICTORY_MESSAGE, DEFEAT_MESSAGE, WORD_SIZE } from '@/settings'
 
@@ -114,19 +115,54 @@ describe('WordleBoard', () => {
       expect(wrapper.find<HTMLInputElement>('input[type=text]').element.value).toEqual('HRT')
     })
 
-    test("remains in focus the entire time", async () => {
-      document.body.innerHTML = `<div id="app"></div>`
-      wrapper = mount(WordleBoard, {
-        props: { wordOfTheDay },
-        attachTo: "#app"
-      })
+    test('The player loses control after the max amount of guesses', async () => {
+      const guesses = [
+        'WRONG',
+        'GUESS',
+        'HELLO',
+        'WORLD',
+        'HAPPY',
+        'CODER'
+      ]
+      for (const guess of guesses) {
+        await playerSubmitsGuess(guess)
+      }
 
-      expect(wrapper.find("input[type=text]").attributes("autofocus")).not.toBeUndefined()
+      expect(wrapper.find('input[type=text]').attributes('disabled')).not.toBeUndefined()
+    })
 
-      await wrapper.find("input[type=text]").trigger("blur")
-      setTimeout(() => {
-        expect(document.activeElement).toBe(wrapper.find("input[type=text]").element)
-      }, 55)
+    test('The player loses control after the correct guess is given', async () => {
+      await playerSubmitsGuess(wordOfTheDay)
+
+      expect(wrapper.find('input[type=text]').attributes('disabled')).not.toBeUndefined()
+    })
+  })
+
+  describe(`there should always be exactly ${MAX_GUESSES} guess-views in the board`, async () => {
+    test(`${MAX_GUESSES} guess-views are present at the start of the game`, async () => {
+      expect(wrapper.findAllComponents(GuessView)).toHaveLength(MAX_GUESSES)
+    })
+
+    test(`${MAX_GUESSES} guess-views are present when the player wins the game`, async () => {
+      await playerSubmitsGuess(wordOfTheDay)
+
+      expect(wrapper.findAllComponents(GuessView)).toHaveLength(MAX_GUESSES)
+    })
+
+    test(`${MAX_GUESSES} guess-views are present as the player loses the game`, async () => {
+      const guesses = [
+        "WRONG",
+        "GUESS",
+        "HELLO",
+        "WORLD",
+        "HAPPY",
+        "CODER"
+      ]
+
+      for (const guess of guesses) {
+        await playerSubmitsGuess(guess)
+        expect(wrapper.findAllComponents(GuessView)).toHaveLength(MAX_GUESSES)
+      }
     })
   })
 
