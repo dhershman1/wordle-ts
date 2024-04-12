@@ -116,7 +116,7 @@ describe('WordleBoard', () => {
     })
 
     test('Player guesses can only contain letters', async () => {
-      await playerTypesAndSubmitsGuess('H3!RT')
+      await playerTypesGuess('H3!RT')
 
       expect(wrapper.find<HTMLInputElement>('input[type=text]').element.value).toEqual('HRT')
     })
