@@ -144,6 +144,25 @@ describe('WordleBoard', () => {
     })
   })
 
+  test('All previous Guesses done by the player are visible on the page', async () => {
+    const guesses = [
+      'WRONG',
+      'GUESS',
+      'HELLO',
+      'WORLD',
+      'HAPPY',
+      'CODER'
+    ]
+
+    for (const guess of guesses) {
+      await playerTypesAndSubmitsGuess(guess)
+    }
+
+    for (const guess of guesses) {
+      expect(wrapper.text()).toContain(guess)
+    }
+  })
+
   describe(`there should always be exactly ${MAX_GUESSES} guess-views in the board`, async () => {
     test(`${MAX_GUESSES} guess-views are present at the start of the game`, async () => {
       expect(wrapper.findAllComponents(GuessView)).toHaveLength(MAX_GUESSES)
@@ -172,22 +191,15 @@ describe('WordleBoard', () => {
     })
   })
 
-  test('All previous Guesses done by the player are visible on the page', async () => {
-    const guesses = [
-      'WRONG',
-      'GUESS',
-      'HELLO',
-      'WORLD',
-      'HAPPY',
-      'CODER'
-    ]
+  describe('Displaying hints/feedback to the player', () => {
+    test('hints are not displayed until the player submits their guess', async () => {
+      expect(wrapper.find('[data-letter-feedback]').exists()).toBe(false)
 
-    for (const guess of guesses) {
-      await playerTypesAndSubmitsGuess(guess)
-    }
+      await playerTypesGuess(wordOfTheDay)
+      expect(wrapper.find('[data-letter-feedback]').exists()).toBe(false)
 
-    for (const guess of guesses) {
-      expect(wrapper.text()).toContain(guess)
-    }
+      await playerPressesEnter()
+      expect(wrapper.find('[data-letter-feedback]').exists()).toBe(true)
+    })
   })
 })
