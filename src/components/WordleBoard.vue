@@ -20,6 +20,13 @@ const isGameOver = computed(() =>
 
 <template>
   <main>
+    <ul>
+      <li
+      v-for="(guess, index) in guessesSubmitted"
+      :key="`${index}-${guess}`">
+        {{ guess }}
+      </li>
+    </ul>
     <guess-input @guess-submitted="guess => guessesSubmitted.push(guess)" />
     <p
       v-if="isGameOver"
