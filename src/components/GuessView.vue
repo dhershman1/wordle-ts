@@ -11,11 +11,14 @@ function getFeedback (letterPosition: number): null | 'correct' | 'incorrect' | 
     return null
   }
 
-  if (!props.answer.includes(props.guess[letterPosition])) {
+  const letterGuessed = props.guess[letterPosition]
+  const letterExpected = props.answer[letterPosition]
+
+  if (!props.answer.includes(letterGuessed)) {
     return 'incorrect'
   }
 
-  return props.answer[letterPosition] === props.guess[letterPosition] ? 'correct' : 'almost'
+  return letterExpected === letterGuessed ? 'correct' : 'almost'
 }
 </script>
 
@@ -66,6 +69,16 @@ li:not([data-letter=" "]) {
   50% {
     transform: scale(1.4);
   }
+}
+
+[data-letter-feedback=correct] {
+  --back-color: hsl(120, 25%, 65%);
+}
+[data-letter-feedback=almost] {
+  --back-color: hsl(40, 65%, 48%);
+}
+[data-letter-feedback=incorrect] {
+  --back-color: hsl(0, 0%, 70%);
 }
 
 $maxWordSize: 5;
