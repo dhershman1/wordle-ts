@@ -89,6 +89,12 @@ describe('WordleBoard', () => {
       expect(wrapper.text()).toContain(VICTORY_MESSAGE)
     })
 
+    test('the input gets cleared after each submission', async () => {
+      await playerSubmitsGuess('WRONG')
+
+      expect(wrapper.find<HTMLInputElement>('input[type=text]').element.value).toEqual('')
+    })
+
     test('Player Guesses can only be submitted if they are real words', async () => {
       await playerSubmitsGuess('QWERT')
 
