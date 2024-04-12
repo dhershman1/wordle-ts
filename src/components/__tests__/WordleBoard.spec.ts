@@ -14,7 +14,7 @@ describe('WordleBoard', () => {
     wrapper = mount(WordleBoard, { props: { wordOfTheDay } })
   })
 
-  async function playerSubmitsGuess (guess: string) {
+  async function playerTypesAndSubmitsGuess (guess: string) {
     const guessInput = wrapper.find('input[type=text]')
 
     await guessInput.setValue(guess)
@@ -23,7 +23,7 @@ describe('WordleBoard', () => {
 
   describe('End of the game messages', () => {
     test('A Victory message appears when the user makes a guess that matches the word of the day', async () => {
-      await playerSubmitsGuess(wordOfTheDay)
+      await playerTypesAndSubmitsGuess(wordOfTheDay)
 
       expect(wrapper.text()).toContain(VICTORY_MESSAGE)
     })
@@ -43,7 +43,7 @@ describe('WordleBoard', () => {
     }) => {
       test(`Therefore for ${numberOfGuesses} guess(es), a defeat message should ${shouldSeeDefeatMessage ? '' : 'not'} appear`, async () => {
         for (let i = 0; i < numberOfGuesses; i++) {
-          await playerSubmitsGuess('WRONG')
+          await playerTypesAndSubmitsGuess('WRONG')
         }
 
         if (shouldSeeDefeatMessage) {
@@ -85,32 +85,32 @@ describe('WordleBoard', () => {
 
   describe('Player Input', () => {
     test(`Player guesses are limited to ${WORD_SIZE} characters`, async () => {
-      await playerSubmitsGuess(wordOfTheDay + 'EXTRA')
+      await playerTypesAndSubmitsGuess(wordOfTheDay + 'EXTRA')
 
       expect(wrapper.text()).toContain(VICTORY_MESSAGE)
     })
 
     test('the input gets cleared after each submission', async () => {
-      await playerSubmitsGuess('WRONG')
+      await playerTypesAndSubmitsGuess('WRONG')
 
       expect(wrapper.find<HTMLInputElement>('input[type=text]').element.value).toEqual('')
     })
 
     test('Player Guesses can only be submitted if they are real words', async () => {
-      await playerSubmitsGuess('QWERT')
+      await playerTypesAndSubmitsGuess('QWERT')
 
       expect(wrapper.text()).not.toContain(VICTORY_MESSAGE)
       expect(wrapper.text()).not.toContain(DEFEAT_MESSAGE)
     })
 
     test('Player guesses are not case sensitive', async () => {
-      await playerSubmitsGuess(wordOfTheDay.toLowerCase())
+      await playerTypesAndSubmitsGuess(wordOfTheDay.toLowerCase())
 
       expect(wrapper.text()).toContain(VICTORY_MESSAGE)
     })
 
     test('Player guesses can only contain letters', async () => {
-      await playerSubmitsGuess('H3!RT')
+      await playerTypesAndSubmitsGuess('H3!RT')
 
       expect(wrapper.find<HTMLInputElement>('input[type=text]').element.value).toEqual('HRT')
     })
@@ -125,14 +125,14 @@ describe('WordleBoard', () => {
         'CODER'
       ]
       for (const guess of guesses) {
-        await playerSubmitsGuess(guess)
+        await playerTypesAndSubmitsGuess(guess)
       }
 
       expect(wrapper.find('input[type=text]').attributes('disabled')).not.toBeUndefined()
     })
 
     test('The player loses control after the correct guess is given', async () => {
-      await playerSubmitsGuess(wordOfTheDay)
+      await playerTypesAndSubmitsGuess(wordOfTheDay)
 
       expect(wrapper.find('input[type=text]').attributes('disabled')).not.toBeUndefined()
     })
@@ -144,7 +144,7 @@ describe('WordleBoard', () => {
     })
 
     test(`${MAX_GUESSES} guess-views are present when the player wins the game`, async () => {
-      await playerSubmitsGuess(wordOfTheDay)
+      await playerTypesAndSubmitsGuess(wordOfTheDay)
 
       expect(wrapper.findAllComponents(GuessView)).toHaveLength(MAX_GUESSES)
     })
@@ -160,7 +160,7 @@ describe('WordleBoard', () => {
       ]
 
       for (const guess of guesses) {
-        await playerSubmitsGuess(guess)
+        await playerTypesAndSubmitsGuess(guess)
         expect(wrapper.findAllComponents(GuessView)).toHaveLength(MAX_GUESSES)
       }
     })
@@ -177,7 +177,7 @@ describe('WordleBoard', () => {
     ]
 
     for (const guess of guesses) {
-      await playerSubmitsGuess(guess)
+      await playerTypesAndSubmitsGuess(guess)
     }
 
     for (const guess of guesses) {
