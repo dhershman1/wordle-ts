@@ -36,7 +36,7 @@ describe('WordleBoard', () => {
       { numberOfGuesses: 4, shouldSeeDefeatMessage: false },
       { numberOfGuesses: 5, shouldSeeDefeatMessage: false },
       { numberOfGuesses: MAX_GUESSES, shouldSeeDefeatMessage: true },
-    ])('A defeat message should appear if the player makes 6 incorrect guesses', ({
+    ])(`A defeat message should appear if the player makes ${MAX_GUESSES} incorrect guesses`, ({
       numberOfGuesses,
       shouldSeeDefeatMessage
     }) => {
